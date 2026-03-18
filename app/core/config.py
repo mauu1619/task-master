@@ -1,0 +1,11 @@
+DB_USER = 'daniil'
+DB_PASS = '1619ddlove'
+DB_HOST = '127.0.0.1'
+DB_PORT = '5432'
+DB_NAME = 'task_master_fapi_db'
+
+CONNECTION_STR = f"postgresql+psycopg://{DB_USER}:{DB_PASS}@{DB_HOST}:{DB_PORT}/{DB_NAME}"
+
+SECRET_KEY = 'abd15941e394d663760a4c65d3afbedcd0469ed1d2065b32abee3d0bf38e2582'
+ALGORITHM = 'HS256'
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
