@@ -43,8 +43,7 @@
    uv sync
 
 2. Запустите миграции базы данных:
-   uv run alembic upgrade head  # Для Alembic
-   # или используйте ваш инструмент миграций для FastAPI
+   uv run alembic upgrade head  # Для Alembic 
 
 3. Запустите сервер разработки:
    uv run uvicorn main:app --reload
