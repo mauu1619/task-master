@@ -5,7 +5,7 @@
 ## Технологический стек
 
 * **Язык:** Python 3.12+
-* **Фреймворк:** FastAPI (или Django DRF - укажи свой вариант)
+* **Фреймворк:** FastAPI
 * **Управление зависимостями:** uv
 * **База данных:** PostgreSQL
 * **Контейнеризация:** Docker, Docker Compose
@@ -22,9 +22,11 @@
 
 Для запуска проекта вам потребуется установленный Docker и Docker Compose.
 
+```bash
 1. Клонируйте репозиторий:
    git clone https://github.com/mauu1619/task-master.git
    cd task-master
+   
 
 2. Создайте файл .env на основе примера:
    cp .env.example .env
@@ -32,13 +34,19 @@
 3. Запустите проект:
    docker-compose up --build
 
+4. Запустить тесты:
+   docker compose exec app uv run pytest
+```
+
 Приложение будет доступно по адресу: http://localhost:8000
+
 Документация API (Swagger): http://localhost:8000/docs
 
 ## Локальная разработка
 
 Если вы предпочитаете запускать проект без Docker, рекомендуется использовать менеджер пакетов uv.
 
+```bash
 1. Установите зависимости:
    uv sync
 
@@ -47,12 +55,12 @@
 
 3. Запустите сервер разработки:
    uv run uvicorn main:app --reload
-
+```
 ## Тестирование
 
 Для запуска набора тестов выполните команду:
 
-uv run pytest
+`uv run pytest`
 
 Тесты покрывают основные эндпоинты API и логику обработки данных.
 
