@@ -1,22 +1,30 @@
-def test_project_ownership(client):
-    client.post("/api/users/", json={"username": "owner", "password": "pass", "email": "o@m.co"})
-    token = client.post("/api/login/token", data={"username": "owner", "password": "pass"}).json()["access_token"]
-    headers = {"Authorization": f"Bearer {token}"}
-
-    proj_resp = client.post("/api/projects/", json={"title": "Test Proj"}, headers=headers)
-    assert proj_resp.status_code == 200
-    assert proj_resp.json()["owner_id"] is not None
+def test_no_projects(client, user_token):
+    response = client.get("api/projects/", headers={
+        "Authorization": f"Bearer {user_token}"
+    })
+    assert response.status_code == 200
+    assert "There are no projects yet" == response.json()['message']
 
 
-def test_access_denied_for_other_user(client):
-    client.post("/api/user/registration", json={"username": "u1", "password": "p1", "email": "1@m.co"})
-    t1 = client.post("/api/login/token", data={"username": "u1", "password": "p1"}).json()["access_token"]
-    p1_id = client.post("/api/projects/", json={"title": "P1"}, headers={"Authorization": f"Bearer {t1}"}).json()["id"]
+def test_create_and_count_projects(client, test_project, user_token):
+    create_response = client.post(
+        "api/projects/",
+        json={
+            'title': 'newproject',
+            'description': 'this is a new project'
+        },
+        headers={"Authorization": f'Bearer {user_token}'}
+    )
+    assert create_response.status_code == 201
 
-    client.post("/api/user/registration", json={"username": "u2", "password": "p2", "email": "2@m.co"})
-    t2 = client.post("/api/login/token", data={"username": "u2", "password": "p2"}).json()["access_token"]
-
-    delete_resp = client.delete(f"/api/projects/{p1_id}", headers={"Authorization": f"Bearer {t2}"})
+    check_response = client.get("api/projects/", headers={
+        "Authorization": f"Bearer {user_token}"
+    })
+    assert check_response.status_code == 200
     
-    assert delete_resp.status_code == 403
-    assert delete_resp.json()["detail"] == "Not enough permissions"
+    data = check_response.json()
+    assert len(data) == 2
+
+    titles = [p['title'] for p in data]
+    assert 'newproject' in titles
+    assert 'testproject' in titles

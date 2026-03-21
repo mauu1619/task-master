@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import Depends, HTTPException, APIRouter
+from fastapi import Depends, HTTPException, APIRouter, status
 from sqlmodel import Session, select
 
 from app.models.user import User
@@ -12,7 +12,7 @@ from app.core.security import get_password_hash, get_current_user
 router = APIRouter()
 
 
-@router.post("/registration", response_model=UserShow)
+@router.post("/register", response_model=UserShow, status_code=status.HTTP_201_CREATED)
 async def create_user(
     user_in: UserCreate,
     session: Annotated[Session, Depends(get_session)]

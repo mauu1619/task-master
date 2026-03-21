@@ -36,7 +36,7 @@ def get_project_or_error(
     
 
 
-@router.post("/", response_model=Project)
+@router.post("/", response_model=Project, status_code=status.HTTP_201_CREATED)
 async def create_project(
     *,
     user: Annotated[User, Depends(get_current_user)],
@@ -67,7 +67,7 @@ async def get_projects(
         select(Project).where(
             user.id == Project.owner_id).offset(offset).limit(limit)).all()
     if not projects:
-        return {"message": "There is no projects yet"}
+        return {"message": "There are no projects yet"}
     return projects
 
 
